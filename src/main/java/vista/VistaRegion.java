@@ -2,6 +2,7 @@ package vista;
 
 import config.Coneccion;
 import java.sql.*;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 public class VistaRegion extends javax.swing.JFrame {
@@ -202,7 +203,8 @@ public class VistaRegion extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdicionarActionPerformed
-        // TODO add your handling code here:
+        agregar();
+        listar();
     }//GEN-LAST:event_btnAdicionarActionPerformed
 
     /**
@@ -255,6 +257,32 @@ public class VistaRegion extends javax.swing.JFrame {
             tableRegiones.setModel(modelo);
         }catch(Exception e){
             System.out.println("Error: "+e);
+        }
+    }
+    
+    void agregar(){
+        String regNom = inputRegNom.getText();
+        if(regNom.equals("")){
+            JOptionPane.showMessageDialog(null, "Complete los datos");
+        }
+        else{
+            try{
+                cn = con.getConeccion();
+                st = cn.prepareStatement("INSERT INTO gzz_regiones (RegNom) VALUES (?)");
+                st.setString(1, regNom);
+                st.executeUpdate();
+                inputRegNom.setText("");
+                limpiarTabla();
+            }catch(Exception e){
+                System.out.println("Error: "+e);
+            }
+        }
+    }
+    
+    void limpiarTabla(){
+        int count = tableRegiones.getRowCount()-1;
+        for(int i=0;i<=count;i++){
+            modelo.removeRow(0);
         }
     }
     

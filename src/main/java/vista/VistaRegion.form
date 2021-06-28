@@ -261,12 +261,18 @@
             <Property name="text" type="java.lang.String" value="Inactivar"/>
             <Property name="enabled" type="boolean" value="false"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnInactivarActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="btnReactivar">
           <Properties>
             <Property name="text" type="java.lang.String" value="Reactivar"/>
             <Property name="enabled" type="boolean" value="false"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnReactivarActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="btnActualizar">
           <Properties>

@@ -79,7 +79,7 @@ public class VistaMunicipio extends javax.swing.JFrame {
                 .addGap(28, 28, 28)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jTextField1)
-                    .addComponent(jComboBox1, 0, 154, Short.MAX_VALUE))
+                    .addComponent(jComboBox1, 0, 186, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(

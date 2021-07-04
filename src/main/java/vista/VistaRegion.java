@@ -13,6 +13,7 @@ public class VistaRegion extends javax.swing.JFrame {
     DefaultTableModel modelo;
     String regNomSelect;
     
+    
     public VistaRegion() {
         initComponents();
         setLocationRelativeTo(null);
@@ -79,14 +80,14 @@ public class VistaRegion extends javax.swing.JFrame {
 
             },
             new String [] {
-                "RegNom"
+                "Nombre Region", "Estado Region"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class
+                java.lang.String.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                false
+                false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -152,7 +153,6 @@ public class VistaRegion extends javax.swing.JFrame {
         });
 
         btnInactivar.setText("Inactivar");
-        btnInactivar.setEnabled(false);
         btnInactivar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnInactivarActionPerformed(evt);
@@ -160,7 +160,6 @@ public class VistaRegion extends javax.swing.JFrame {
         });
 
         btnReactivar.setText("Reactivar");
-        btnReactivar.setEnabled(false);
         btnReactivar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnReactivarActionPerformed(evt);
@@ -253,8 +252,23 @@ public class VistaRegion extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdicionarActionPerformed
-        adicionar();
-        listar();
+        String regNom = inputRegNom.getText();
+        if(regNom.equals("")){
+            JOptionPane.showMessageDialog(null, "Complete los datos");
+        }
+        else{
+            try{
+                cn = con.getConeccion();
+                st = cn.prepareStatement("INSERT INTO gzz_regiones (RegNom, RegEst) VALUES (?, ?)");
+                st.setString(1, regNom);
+                st.setString(2, "A");
+                st.executeUpdate();
+                limpiarInputs();
+                actualizar();
+            }catch(Exception e){
+                System.out.println("Error: "+e);
+            }
+        }
     }//GEN-LAST:event_btnAdicionarActionPerformed
 
     private void tableRegionesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableRegionesMouseClicked
@@ -269,23 +283,53 @@ public class VistaRegion extends javax.swing.JFrame {
     }//GEN-LAST:event_tableRegionesMouseClicked
 
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
-        modificar();
-        listar();
+        String regNom = inputRegNom.getText();
+        if(regNom.equals("") || regNomSelect.equals("")){
+            JOptionPane.showMessageDialog(null, "No selecciono una region");
+        }
+        else{
+            try{
+                cn = con.getConeccion();
+                st = cn.prepareStatement("UPDATE gzz_regiones SET RegNom = ? WHERE RegNom = ?");
+                st.setString(1, regNom);
+                st.setString(2, regNomSelect);
+                st.executeUpdate();
+                limpiarInputs();
+                actualizar();
+            }catch(Exception e){
+                System.out.println("Error: "+e);
+            }
+        }
     }//GEN-LAST:event_btnModificarActionPerformed
 
     private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
-        limpiarTabla();
-        listar();
+        actualizar();
     }//GEN-LAST:event_btnActualizarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        eliminar();
-        listar();
+        if(regNomSelect.equals("")){
+            JOptionPane.showMessageDialog(null, "No selecciono una region");
+        }
+        else{
+            try{
+                cn = con.getConeccion();
+                st = cn.prepareStatement("DELETE FROM gzz_regiones WHERE RegNom = ?");
+                st.setString(1, regNomSelect);
+                st.executeUpdate();
+                limpiarInputs();
+                actualizar();
+            }catch(Exception e){
+                if(e instanceof SQLIntegrityConstraintViolationException) {
+                    JOptionPane.showMessageDialog(null, "Otros elementos hacen referencia al campo: "+regNomSelect);
+                }
+                System.out.println("Error: "+e);
+            }
+        }
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        inputRegNom.setText("");
-        regNomSelect = "";
+        limpiarInputs();
+        actualizar();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
@@ -293,11 +337,41 @@ public class VistaRegion extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSalirActionPerformed
 
     private void btnReactivarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReactivarActionPerformed
-        reactivar();
+        if(regNomSelect.equals("")){
+            JOptionPane.showMessageDialog(null, "No selecciono una region");
+        }
+        else{
+            try{
+                cn = con.getConeccion();
+                st = cn.prepareStatement("UPDATE gzz_regiones SET RegEst = ? WHERE RegNom = ?");
+                st.setString(1, "A");
+                st.setString(2, regNomSelect);
+                st.executeUpdate();
+                limpiarInputs();
+                actualizar();
+            }catch(Exception e){
+                System.out.println("Error: "+e);
+            }
+        }
     }//GEN-LAST:event_btnReactivarActionPerformed
 
     private void btnInactivarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInactivarActionPerformed
-        inactivar();
+        if(regNomSelect.equals("")){
+            JOptionPane.showMessageDialog(null, "No selecciono una region");
+        }
+        else{
+            try{
+                cn = con.getConeccion();
+                st = cn.prepareStatement("UPDATE gzz_regiones SET RegEst = ? WHERE RegNom = ?");
+                st.setString(1, "I");
+                st.setString(2, regNomSelect);
+                st.executeUpdate();
+                limpiarInputs();
+                actualizar();
+            }catch(Exception e){
+                System.out.println("Error: "+e);
+            }
+        }
     }//GEN-LAST:event_btnInactivarActionPerformed
 
     /**
@@ -336,15 +410,21 @@ public class VistaRegion extends javax.swing.JFrame {
         });
     }
     
+    void actualizar(){
+        limpiarTabla();
+        listar();
+    }
+    
     void listar(){
         try{
             cn = con.getConeccion();
             st = cn.prepareStatement("SELECT * FROM gzz_regiones");
             rs = st.executeQuery();
-            Object [] region = new Object[1];
+            Object [] region = new Object[2];
             modelo = (DefaultTableModel) tableRegiones.getModel();
             while(rs.next()){
                 region[0] = rs.getString("RegNom");
+                region[1] = rs.getString("RegEst");
                 modelo.addRow(region);
             }
             tableRegiones.setModel(modelo);
@@ -353,103 +433,9 @@ public class VistaRegion extends javax.swing.JFrame {
         }
     }
     
-    void adicionar(){
-        String regNom = inputRegNom.getText();
-        if(regNom.equals("")){
-            JOptionPane.showMessageDialog(null, "Complete los datos");
-        }
-        else{
-            try{
-                cn = con.getConeccion();
-                st = cn.prepareStatement("INSERT INTO gzz_regiones (RegNom) VALUES (?)");
-                st.setString(1, regNom);
-                st.executeUpdate();
-                inputRegNom.setText("");
-                limpiarTabla();
-            }catch(Exception e){
-                System.out.println("Error: "+e);
-            }
-        }
-    }
-    
-    void modificar(){
-        String regNom = inputRegNom.getText();
-        if(regNom.equals("") || regNomSelect.equals("")){
-            JOptionPane.showMessageDialog(null, "No selecciono una region");
-        }
-        else{
-            try{
-                cn = con.getConeccion();
-                st = cn.prepareStatement("UPDATE gzz_regiones SET RegNom = ? WHERE RegNom = ?");
-                st.setString(1, regNom);
-                st.setString(2, regNomSelect);
-                st.executeUpdate();
-                inputRegNom.setText("");
-                regNomSelect = "";
-                limpiarTabla();
-            }catch(Exception e){
-                System.out.println("Error: "+e);
-            }
-        }
-    }
-    
-    void eliminar(){
-        if(regNomSelect.equals("")){
-            JOptionPane.showMessageDialog(null, "No selecciono una region");
-        }
-        else{
-            try{
-                cn = con.getConeccion();
-                st = cn.prepareStatement("DELETE FROM gzz_regiones WHERE RegNom = ?");
-                st.setString(1, regNomSelect);
-                st.executeUpdate();
-                inputRegNom.setText("");
-                regNomSelect = "";
-                limpiarTabla();
-            }catch(Exception e){
-                System.out.println("Error: "+e);
-            }
-        }
-    }
-    
-    void reactivar(){
-        if(regNomSelect.equals("")){
-            JOptionPane.showMessageDialog(null, "No selecciono una region");
-        }
-        else{
-            try{
-                cn = con.getConeccion();
-                st = cn.prepareStatement("UPDATE gzz_regiones SET RegEst = ? WHERE RegNom = ?");
-                st.setString(1, "A");
-                st.setString(2, regNomSelect);
-                st.executeUpdate();
-                inputRegNom.setText("");
-                regNomSelect = "";
-                limpiarTabla();
-            }catch(Exception e){
-                System.out.println("Error: "+e);
-            }
-        }
-    }
-    
-    void inactivar(){
-        if(regNomSelect.equals("")){
-            JOptionPane.showMessageDialog(null, "No selecciono una region");
-        }
-        else{
-            try{
-                cn = con.getConeccion();
-                st = cn.prepareStatement("UPDATE gzz_regiones SET RegEst = ? WHERE RegNom = ?");
-                st.setString(1, "I");
-                st.setString(2, regNomSelect);
-                st.executeUpdate();
-                inputRegNom.setText("");
-                regNomSelect = "";
-                limpiarTabla();
-            }catch(Exception e){
-                System.out.println("Error: "+e);
-            }
-        }
+    void limpiarInputs(){
+        inputRegNom.setText("");
+        regNomSelect = "";
     }
     
     void limpiarTabla(){

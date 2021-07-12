@@ -11,8 +11,9 @@ public class VistaRegion extends javax.swing.JFrame {
     PreparedStatement st;
     ResultSet rs;
     DefaultTableModel modelo;
-    String regNomSelect;
-    
+    String regCodSelect;
+    int flag = 0;
+    int rowTable;
     
     public VistaRegion() {
         initComponents();
@@ -32,6 +33,8 @@ public class VistaRegion extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         inputRegNom = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
+        inputRegCod = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tableRegiones = new javax.swing.JTable();
@@ -52,25 +55,44 @@ public class VistaRegion extends javax.swing.JFrame {
 
         jLabel2.setText("Nombre de Region:");
 
+        inputRegNom.setEnabled(false);
+
+        jLabel1.setText("Codigo de Region:");
+
+        inputRegCod.setEnabled(false);
+        inputRegCod.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                inputRegCodActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel2)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel1))
                 .addGap(47, 47, 47)
-                .addComponent(inputRegNom, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(inputRegNom, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(inputRegCod, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(10, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(inputRegCod, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(inputRegNom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Tabla_Regiones"));
@@ -80,14 +102,14 @@ public class VistaRegion extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Nombre Region", "Estado Region"
+                "Codigo Region", "Nombre Region", "Estado Region"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Object.class
+                java.lang.Object.class, java.lang.String.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false
+                false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -252,127 +274,184 @@ public class VistaRegion extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdicionarActionPerformed
-        String regNom = inputRegNom.getText();
-        if(regNom.equals("")){
-            JOptionPane.showMessageDialog(null, "Complete los datos");
-        }
-        else{
-            try{
-                cn = con.getConeccion();
-                st = cn.prepareStatement("INSERT INTO gzz_regiones (RegNom, RegEst) VALUES (?, ?)");
-                st.setString(1, regNom);
-                st.setString(2, "A");
-                st.executeUpdate();
-                limpiarInputs();
-                actualizar();
-            }catch(Exception e){
-                System.out.println("Error: "+e);
-            }
-        }
+        inputRegCod.setEnabled(false);
+        inputRegNom.setEnabled(true);
+        limpiarInputs();
+        flag = 1; 
     }//GEN-LAST:event_btnAdicionarActionPerformed
 
     private void tableRegionesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableRegionesMouseClicked
-        int row = tableRegiones.getSelectedRow();
-        if (row == -1) {
+        rowTable = tableRegiones.getSelectedRow();
+        if (rowTable == -1) {
             JOptionPane.showMessageDialog(null, "No se Selecciono");
         } 
         else {
-            regNomSelect = tableRegiones.getValueAt(row, 0).toString();
-            inputRegNom.setText(regNomSelect);
+            regCodSelect = tableRegiones.getValueAt(rowTable, 0).toString();
         }
     }//GEN-LAST:event_tableRegionesMouseClicked
-
+    
+    private void llenarDatos(){
+        inputRegCod.setText(regCodSelect);
+        inputRegNom.setText(tableRegiones.getValueAt(rowTable, 1).toString());
+    }
+    
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
-        String regNom = inputRegNom.getText();
-        if(regNom.equals("") || regNomSelect.equals("")){
-            JOptionPane.showMessageDialog(null, "No selecciono una region");
-        }
-        else{
-            try{
-                cn = con.getConeccion();
-                st = cn.prepareStatement("UPDATE gzz_regiones SET RegNom = ? WHERE RegNom = ?");
-                st.setString(1, regNom);
-                st.setString(2, regNomSelect);
-                st.executeUpdate();
-                limpiarInputs();
-                actualizar();
-            }catch(Exception e){
-                System.out.println("Error: "+e);
-            }
+        if(regCodSelect.compareTo("")!=0){
+            inputRegCod.setEnabled(false);
+            inputRegNom.setEnabled(true);
+            llenarDatos();
+            flag = 2;
         }
     }//GEN-LAST:event_btnModificarActionPerformed
 
     private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
-        actualizar();
+        if(flag==0){
+            JOptionPane.showMessageDialog(null, "Ninguna Opcion Seleccionada");
+        }
+        if(flag==1){
+            String regNom = inputRegNom.getText();
+            if (regNom.equals("")) {
+                JOptionPane.showMessageDialog(null, "Complete los datos");
+            } 
+            else {
+                try {
+                    cn = con.getConeccion();
+                    st = cn.prepareStatement("INSERT INTO regiones (RegNom, RegEst) VALUES (?, ?)");
+                    st.setString(1, regNom);
+                    st.setString(2, "A");
+                    st.executeUpdate();
+                    //limpiarInputs();
+                    actualizar();
+                } catch (Exception e) {
+                    System.out.println("Error: " + e);
+                }
+            }
+        }
+        if(flag==2){
+            String regNom = inputRegNom.getText();
+            if (regNom.equals("") || regCodSelect.equals("")) {
+                JOptionPane.showMessageDialog(null, "No selecciono una region");
+            } 
+            else {
+                try {
+                    cn = con.getConeccion();
+                    st = cn.prepareStatement("UPDATE regiones SET RegNom = ? WHERE RegCod = ?");
+                    st.setString(1, regNom);
+                    st.setString(2, regCodSelect);
+                    st.executeUpdate();
+                    //limpiarInputs();
+                    actualizar();
+                } catch (Exception e) {
+                    System.out.println("Error: " + e);
+                }
+            }
+        }
+        if(flag==3){
+            if (regCodSelect.equals("")) {
+                JOptionPane.showMessageDialog(null, "No selecciono una region");
+            } 
+            else {
+                try {
+                    cn = con.getConeccion();
+                    //st = cn.prepareStatement("DELETE FROM regiones WHERE RegCod = ?");
+                    st = cn.prepareStatement("UPDATE regiones SET RegEst = ? WHERE RegCod = ?");
+                    st.setString(1, "*");
+                    st.setString(2, regCodSelect);
+                    st.executeUpdate();
+                    //limpiarInputs();
+                    actualizar();
+                } catch (Exception e) {
+                    if (e instanceof SQLIntegrityConstraintViolationException) {
+                        JOptionPane.showMessageDialog(null, "Otros elementos hacen referencia al campo: " + regCodSelect);
+                    }
+                    System.out.println("Error: " + e);
+                }
+            }
+        }
+        if(flag==4){
+            if (regCodSelect.equals("")) {
+                JOptionPane.showMessageDialog(null, "No selecciono una region");
+            } 
+            else {
+                try {
+                    cn = con.getConeccion();
+                    st = cn.prepareStatement("UPDATE regiones SET RegEst = ? WHERE RegCod = ?");
+                    st.setString(1, "I");
+                    st.setString(2, regCodSelect);
+                    st.executeUpdate();
+                    //limpiarInputs();
+                    actualizar();
+                } catch (Exception e) {
+                    System.out.println("Error: " + e);
+                }
+            }
+        }
+        if(flag==5){
+            if (regCodSelect.equals("")) {
+                JOptionPane.showMessageDialog(null, "No selecciono una region");
+            } 
+            else {
+                try {
+                    cn = con.getConeccion();
+                    st = cn.prepareStatement("UPDATE regiones SET RegEst = ? WHERE RegCod = ?");
+                    st.setString(1, "A");
+                    st.setString(2, regCodSelect);
+                    st.executeUpdate();
+                    //limpiarInputs();
+                    actualizar();
+                } catch (Exception e) {
+                    System.out.println("Error: " + e);
+                }
+            }
+        }
+        limpiarInputs();
+        inputRegCod.setEnabled(false);
+        inputRegNom.setEnabled(false);
+        flag = 0;
     }//GEN-LAST:event_btnActualizarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        if(regNomSelect.equals("")){
-            JOptionPane.showMessageDialog(null, "No selecciono una region");
-        }
-        else{
-            try{
-                cn = con.getConeccion();
-                st = cn.prepareStatement("DELETE FROM gzz_regiones WHERE RegNom = ?");
-                st.setString(1, regNomSelect);
-                st.executeUpdate();
-                limpiarInputs();
-                actualizar();
-            }catch(Exception e){
-                if(e instanceof SQLIntegrityConstraintViolationException) {
-                    JOptionPane.showMessageDialog(null, "Otros elementos hacen referencia al campo: "+regNomSelect);
-                }
-                System.out.println("Error: "+e);
-            }
+        if(regCodSelect.compareTo("")!=0){
+            inputRegCod.setEnabled(false);
+            inputRegNom.setEnabled(false);
+            llenarDatos();
+            flag = 3;
         }
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        inputRegCod.setEnabled(false);
+        inputRegNom.setEnabled(false);
         limpiarInputs();
-        actualizar();
+        flag = 0;
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
+        limpiarInputs();
         System.exit(0);
     }//GEN-LAST:event_btnSalirActionPerformed
 
     private void btnReactivarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReactivarActionPerformed
-        if(regNomSelect.equals("")){
-            JOptionPane.showMessageDialog(null, "No selecciono una region");
-        }
-        else{
-            try{
-                cn = con.getConeccion();
-                st = cn.prepareStatement("UPDATE gzz_regiones SET RegEst = ? WHERE RegNom = ?");
-                st.setString(1, "A");
-                st.setString(2, regNomSelect);
-                st.executeUpdate();
-                limpiarInputs();
-                actualizar();
-            }catch(Exception e){
-                System.out.println("Error: "+e);
-            }
+        if(regCodSelect.compareTo("")!=0){
+            inputRegCod.setEnabled(false);
+            inputRegNom.setEnabled(false);
+            llenarDatos();
+            flag = 5;
         }
     }//GEN-LAST:event_btnReactivarActionPerformed
 
     private void btnInactivarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInactivarActionPerformed
-        if(regNomSelect.equals("")){
-            JOptionPane.showMessageDialog(null, "No selecciono una region");
-        }
-        else{
-            try{
-                cn = con.getConeccion();
-                st = cn.prepareStatement("UPDATE gzz_regiones SET RegEst = ? WHERE RegNom = ?");
-                st.setString(1, "I");
-                st.setString(2, regNomSelect);
-                st.executeUpdate();
-                limpiarInputs();
-                actualizar();
-            }catch(Exception e){
-                System.out.println("Error: "+e);
-            }
+        if(regCodSelect.compareTo("")!=0){
+            inputRegCod.setEnabled(false);
+            inputRegNom.setEnabled(false);
+            llenarDatos();
+            flag = 4;
         }
     }//GEN-LAST:event_btnInactivarActionPerformed
+
+    private void inputRegCodActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputRegCodActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_inputRegCodActionPerformed
 
     /**
      * @param args the command line arguments
@@ -418,13 +497,14 @@ public class VistaRegion extends javax.swing.JFrame {
     void listar(){
         try{
             cn = con.getConeccion();
-            st = cn.prepareStatement("SELECT * FROM gzz_regiones");
+            st = cn.prepareStatement("SELECT * FROM regiones");
             rs = st.executeQuery();
-            Object [] region = new Object[2];
+            Object [] region = new Object[3];
             modelo = (DefaultTableModel) tableRegiones.getModel();
             while(rs.next()){
-                region[0] = rs.getString("RegNom");
-                region[1] = rs.getString("RegEst");
+                region[0] = rs.getString("RegCod");
+                region[1] = rs.getString("RegNom");
+                region[2] = rs.getString("RegEst");
                 modelo.addRow(region);
             }
             tableRegiones.setModel(modelo);
@@ -434,8 +514,9 @@ public class VistaRegion extends javax.swing.JFrame {
     }
     
     void limpiarInputs(){
+        inputRegCod.setText("");
         inputRegNom.setText("");
-        regNomSelect = "";
+        regCodSelect = "";
     }
     
     void limpiarTabla(){
@@ -454,7 +535,9 @@ public class VistaRegion extends javax.swing.JFrame {
     private javax.swing.JButton btnModificar;
     private javax.swing.JButton btnReactivar;
     private javax.swing.JButton btnSalir;
+    private javax.swing.JTextField inputRegCod;
     private javax.swing.JTextField inputRegNom;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;

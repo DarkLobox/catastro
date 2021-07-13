@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 12-07-2021 a las 02:31:43
+-- Tiempo de generación: 13-07-2021 a las 04:05:47
 -- Versión del servidor: 10.4.18-MariaDB
 -- Versión de PHP: 8.0.3
 
@@ -18,26 +18,8 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de datos: `catastro2`
+-- Base de datos: `catastro`
 --
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `viviendas`
---
-
-CREATE TABLE `viviendas` (
-  `VivCod` int(4) NOT NULL,
-  `VivCal` varchar(64) NOT NULL,
-  `VivNum` int(3) NOT NULL,
-  `VivTip` varchar(1) NOT NULL,
-  `VivCodPos` int(5) NOT NULL,
-  `VivMet` decimal(6,2) NOT NULL,
-  `VivOd` varchar(155) DEFAULT NULL,
-  `ZonUrbCod` int(4) NOT NULL,
-  `VivEst` varchar(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -74,25 +56,21 @@ CREATE TABLE `casas_particulares` (
 
 CREATE TABLE `habitas_pisos` (
   `PerCod` int(4) NOT NULL,
-  `PisCod` int(4) NOT NULL
+  `PisCod` int(4) NOT NULL,
+  `HabPisEst` varchar(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `pisos`
+-- Estructura de tabla para la tabla `municipios`
 --
 
-CREATE TABLE `pisos` (
-  `PisCod` int(4) NOT NULL,
-  `VivCod` int(4) NOT NULL,
-  `PisEsc` varchar(1) NOT NULL,
-  `PisPla` int(2) NOT NULL,
-  `PisPue` int(3) NOT NULL,
-  `PisMet` int(4) NOT NULL,
-  `PisOd` varchar(155) DEFAULT NULL,
-  `PerCod` int(4) NOT NULL,
-  `PisEst` varchar(1) NOT NULL
+CREATE TABLE `municipios` (
+  `MunCod` int(4) NOT NULL,
+  `MunNom` varchar(40) NOT NULL,
+  `RegCod` int(4) NOT NULL,
+  `MunEst` varchar(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -116,14 +94,19 @@ CREATE TABLE `personas` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `municipios`
+-- Estructura de tabla para la tabla `pisos`
 --
 
-CREATE TABLE `municipios` (
-  `MunCod` int(4) NOT NULL,
-  `MunNom` varchar(40) NOT NULL,
-  `RegCod` int(4) NOT NULL,
-  `MunEst` varchar(1) NOT NULL
+CREATE TABLE `pisos` (
+  `PisCod` int(4) NOT NULL,
+  `VivCod` int(4) NOT NULL,
+  `PisEsc` varchar(1) NOT NULL,
+  `PisPla` int(2) NOT NULL,
+  `PisPue` int(3) NOT NULL,
+  `PisMet` int(4) NOT NULL,
+  `PisOd` varchar(155) DEFAULT NULL,
+  `PerCod` int(4) NOT NULL,
+  `PisEst` varchar(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -136,6 +119,24 @@ CREATE TABLE `regiones` (
   `RegCod` int(4) NOT NULL,
   `RegNom` varchar(20) NOT NULL,
   `RegEst` varchar(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `viviendas`
+--
+
+CREATE TABLE `viviendas` (
+  `VivCod` int(4) NOT NULL,
+  `VivCal` varchar(64) NOT NULL,
+  `VivNum` int(3) NOT NULL,
+  `VivTip` varchar(1) NOT NULL,
+  `VivCodPos` int(5) NOT NULL,
+  `VivMet` decimal(6,2) NOT NULL,
+  `VivOd` varchar(155) DEFAULT NULL,
+  `ZonUrbCod` int(4) NOT NULL,
+  `VivEst` varchar(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -155,13 +156,6 @@ CREATE TABLE `zonas_urbanas` (
 --
 -- Índices para tablas volcadas
 --
-
---
--- Indices de la tabla `viviendas`
---
-ALTER TABLE `viviendas`
-  ADD PRIMARY KEY (`VivCod`),
-  ADD KEY `ZonUrbCod` (`ZonUrbCod`);
 
 --
 -- Indices de la tabla `bloques_casas`
@@ -187,12 +181,11 @@ ALTER TABLE `habitas_pisos`
   ADD KEY `PisCod` (`PisCod`);
 
 --
--- Indices de la tabla `pisos`
+-- Indices de la tabla `municipios`
 --
-ALTER TABLE `pisos`
-  ADD PRIMARY KEY (`PisCod`),
-  ADD KEY `VivCod` (`VivCod`),
-  ADD KEY `PerCod` (`PerCod`);
+ALTER TABLE `municipios`
+  ADD PRIMARY KEY (`MunCod`),
+  ADD KEY `RegCod` (`RegCod`);
 
 --
 -- Indices de la tabla `personas`
@@ -203,17 +196,25 @@ ALTER TABLE `personas`
   ADD KEY `VivCod` (`VivCod`);
 
 --
--- Indices de la tabla `municipios`
+-- Indices de la tabla `pisos`
 --
-ALTER TABLE `municipios`
-  ADD PRIMARY KEY (`MunCod`),
-  ADD KEY `RegCod` (`RegCod`);
+ALTER TABLE `pisos`
+  ADD PRIMARY KEY (`PisCod`),
+  ADD KEY `VivCod` (`VivCod`),
+  ADD KEY `PerCod` (`PerCod`);
 
 --
 -- Indices de la tabla `regiones`
 --
 ALTER TABLE `regiones`
   ADD PRIMARY KEY (`RegCod`);
+
+--
+-- Indices de la tabla `viviendas`
+--
+ALTER TABLE `viviendas`
+  ADD PRIMARY KEY (`VivCod`),
+  ADD KEY `ZonUrbCod` (`ZonUrbCod`);
 
 --
 -- Indices de la tabla `zonas_urbanas`
@@ -227,44 +228,44 @@ ALTER TABLE `zonas_urbanas`
 --
 
 --
--- AUTO_INCREMENT de la tabla `viviendas`
+-- AUTO_INCREMENT de la tabla `municipios`
 --
-ALTER TABLE `viviendas`
-  MODIFY `VivCod` int(4) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `municipios`
+  MODIFY `MunCod` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=0;
 
 --
 -- AUTO_INCREMENT de la tabla `personas`
 --
 ALTER TABLE `personas`
-  MODIFY `PerCod` int(4) NOT NULL AUTO_INCREMENT;
+  MODIFY `PerCod` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=0;
 
 --
--- AUTO_INCREMENT de la tabla `municipios`
+-- AUTO_INCREMENT de la tabla `pisos`
 --
-ALTER TABLE `municipios`
-  MODIFY `MunCod` int(4) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `pisos`
+  MODIFY `PisCod` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=0;
 
 --
 -- AUTO_INCREMENT de la tabla `regiones`
 --
 ALTER TABLE `regiones`
-  MODIFY `RegCod` int(4) NOT NULL AUTO_INCREMENT;
+  MODIFY `RegCod` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=0;
+
+--
+-- AUTO_INCREMENT de la tabla `viviendas`
+--
+ALTER TABLE `viviendas`
+  MODIFY `VivCod` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=0;
 
 --
 -- AUTO_INCREMENT de la tabla `zonas_urbanas`
 --
 ALTER TABLE `zonas_urbanas`
-  MODIFY `ZonUrbCod` int(4) NOT NULL AUTO_INCREMENT;
+  MODIFY `ZonUrbCod` int(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=0;
 
 --
 -- Restricciones para tablas volcadas
 --
-
---
--- Filtros para la tabla `viviendas`
---
-ALTER TABLE `viviendas`
-  ADD CONSTRAINT `viviendas_ibfk_1` FOREIGN KEY (`ZonUrbCod`) REFERENCES `zonas_urbanas` (`ZonUrbCod`);
 
 --
 -- Filtros para la tabla `bloques_casas`
@@ -287,6 +288,19 @@ ALTER TABLE `habitas_pisos`
   ADD CONSTRAINT `habitas_pisos_ibfk_2` FOREIGN KEY (`PerCod`) REFERENCES `personas` (`PerCod`);
 
 --
+-- Filtros para la tabla `municipios`
+--
+ALTER TABLE `municipios`
+  ADD CONSTRAINT `municipios_ibfk_1` FOREIGN KEY (`RegCod`) REFERENCES `regiones` (`RegCod`);
+
+--
+-- Filtros para la tabla `personas`
+--
+ALTER TABLE `personas`
+  ADD CONSTRAINT `personas_ibfk_1` FOREIGN KEY (`VivCod`) REFERENCES `viviendas` (`VivCod`),
+  ADD CONSTRAINT `personas_ibfk_2` FOREIGN KEY (`PerCodC`) REFERENCES `personas` (`PerCod`) ON DELETE SET NULL;
+
+--
 -- Filtros para la tabla `pisos`
 --
 ALTER TABLE `pisos`
@@ -294,16 +308,10 @@ ALTER TABLE `pisos`
   ADD CONSTRAINT `pisos_ibfk_2` FOREIGN KEY (`PerCod`) REFERENCES `personas` (`PerCod`);
 
 --
--- Filtros para la tabla `personas`
+-- Filtros para la tabla `viviendas`
 --
-ALTER TABLE `personas`
-  ADD CONSTRAINT `personas_ibfk_1` FOREIGN KEY (`VivCod`) REFERENCES `viviendas` (`VivCod`);
-
---
--- Filtros para la tabla `municipios`
---
-ALTER TABLE `municipios`
-  ADD CONSTRAINT `municipios_ibfk_1` FOREIGN KEY (`RegCod`) REFERENCES `regiones` (`RegCod`);
+ALTER TABLE `viviendas`
+  ADD CONSTRAINT `viviendas_ibfk_1` FOREIGN KEY (`ZonUrbCod`) REFERENCES `zonas_urbanas` (`ZonUrbCod`);
 
 --
 -- Filtros para la tabla `zonas_urbanas`

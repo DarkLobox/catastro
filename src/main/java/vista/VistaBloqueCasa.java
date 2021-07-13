@@ -8,20 +8,20 @@ import java.sql.SQLIntegrityConstraintViolationException;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
-public class VistaZonaUrbana extends javax.swing.JFrame {
+public class VistaBloqueCasa extends javax.swing.JFrame {
     Coneccion con = new Coneccion();
     Connection cn;
     PreparedStatement st;
     ResultSet rs;
     DefaultTableModel modelo;
-    String zonUrbCodSelect;
+    String vivCodSelect;
     int flag = 0;
     int rowTable;
 
-    public VistaZonaUrbana() {
+    public VistaBloqueCasa() {
         initComponents();
         setLocationRelativeTo(null);
-        listarRegNom();
+        listarVivCod();
         listar();
     }
 
@@ -38,16 +38,14 @@ public class VistaZonaUrbana extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        inputZonUrbNom = new javax.swing.JTextField();
-        cboxMunCod = new javax.swing.JComboBox<>();
-        jLabel3 = new javax.swing.JLabel();
-        inputZonUrbCod = new javax.swing.JTextField();
+        inputBloCasMet = new javax.swing.JTextField();
+        cboxVivCod = new javax.swing.JComboBox<>();
         jLabel4 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        inputZonUrbOd = new javax.swing.JTextArea();
+        inputBloCasOd = new javax.swing.JTextArea();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tableMunicipios = new javax.swing.JTable();
+        tableBloquesCasas = new javax.swing.JTable();
         jPanel3 = new javax.swing.JPanel();
         btnAdicionar = new javax.swing.JButton();
         btnModificar = new javax.swing.JButton();
@@ -61,38 +59,34 @@ public class VistaZonaUrbana extends javax.swing.JFrame {
         jTextField1.setText("jTextField1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("ZONA URBANA");
+        setTitle("BLOQUE CASA");
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Registro de Zona Urbana"));
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Registro de Bloque Casa"));
 
-        jLabel1.setText("Nombre de Zona Urbana:");
+        jLabel1.setText("Metros de Bloque Casa:");
 
-        jLabel2.setText("Codigo de Municipio:");
+        jLabel2.setText("Codigo de Vivienda:");
 
-        inputZonUrbNom.setEnabled(false);
-        inputZonUrbNom.addActionListener(new java.awt.event.ActionListener() {
+        inputBloCasMet.setEnabled(false);
+        inputBloCasMet.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                inputZonUrbNomActionPerformed(evt);
+                inputBloCasMetActionPerformed(evt);
             }
         });
 
-        cboxMunCod.setEnabled(false);
-        cboxMunCod.addActionListener(new java.awt.event.ActionListener() {
+        cboxVivCod.setEnabled(false);
+        cboxVivCod.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cboxMunCodActionPerformed(evt);
+                cboxVivCodActionPerformed(evt);
             }
         });
 
-        jLabel3.setText("Codigo de Zona Urbana:");
+        jLabel4.setText("Comentario de Bloque Casa:");
 
-        inputZonUrbCod.setEnabled(false);
-
-        jLabel4.setText("Comentario de Zona Urbana:");
-
-        inputZonUrbOd.setColumns(20);
-        inputZonUrbOd.setRows(5);
-        inputZonUrbOd.setEnabled(false);
-        jScrollPane2.setViewportView(inputZonUrbOd);
+        inputBloCasOd.setColumns(20);
+        inputBloCasOd.setRows(5);
+        inputBloCasOd.setEnabled(false);
+        jScrollPane2.setViewportView(inputBloCasOd);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -102,70 +96,62 @@ public class VistaZonaUrbana extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel3))
-                        .addGap(28, 28, 28)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(inputZonUrbNom)
-                                .addComponent(cboxMunCod, 0, 186, Short.MAX_VALUE))
-                            .addComponent(inputZonUrbCod, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jLabel1)
+                        .addGap(40, 40, 40)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(inputBloCasMet, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cboxVivCod, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jLabel2)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 325, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(16, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(inputZonUrbCod, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel2)
+                    .addComponent(cboxVivCod, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(inputZonUrbNom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cboxMunCod, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(inputBloCasMet, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel4)
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addGap(0, 83, Short.MAX_VALUE))
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 99, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Tabla_Zonas_Urbanas"));
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Tabla_Bloques_Casas"));
 
-        tableMunicipios.setModel(new javax.swing.table.DefaultTableModel(
+        tableBloquesCasas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Codigo Zona Urbana", "Nombre Zona Urbana", "Od Zona Urbana", "Codigo Municipio", "Estado Zona Urbana"
+                "Codigo Vivienda", "Metros Bloque Casa", "Od Bloque Casa", "Estado Bloque Casa"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+                false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
-        tableMunicipios.addMouseListener(new java.awt.event.MouseAdapter() {
+        tableBloquesCasas.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tableMunicipiosMouseClicked(evt);
+                tableBloquesCasasMouseClicked(evt);
             }
         });
-        jScrollPane1.setViewportView(tableMunicipios);
+        jScrollPane1.setViewportView(tableBloquesCasas);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -246,7 +232,7 @@ public class VistaZonaUrbana extends javax.swing.JFrame {
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(142, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(btnInactivar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnAdicionar))
@@ -265,7 +251,7 @@ public class VistaZonaUrbana extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                         .addGap(11, 11, 11)
                         .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(129, 129, 129))
+                .addGap(71, 71, 71))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -311,81 +297,75 @@ public class VistaZonaUrbana extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void inputZonUrbNomActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputZonUrbNomActionPerformed
+    private void inputBloCasMetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputBloCasMetActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_inputZonUrbNomActionPerformed
+    }//GEN-LAST:event_inputBloCasMetActionPerformed
 
-    private void cboxMunCodActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboxMunCodActionPerformed
+    private void cboxVivCodActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboxVivCodActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_cboxMunCodActionPerformed
+    }//GEN-LAST:event_cboxVivCodActionPerformed
 
     private void btnAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdicionarActionPerformed
-        inputZonUrbCod.setEnabled(false);
-        inputZonUrbNom.setEnabled(true);
-        inputZonUrbOd.setEnabled(true);
-        cboxMunCod.setEnabled(true);
+        inputBloCasMet.setEnabled(true);
+        inputBloCasOd.setEnabled(true);
+        cboxVivCod.setEnabled(true);
         limpiarInputs();
         flag = 1;
     }//GEN-LAST:event_btnAdicionarActionPerformed
 
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
-        if(zonUrbCodSelect.compareTo("")!=0){
-            inputZonUrbCod.setEnabled(false);
-            inputZonUrbNom.setEnabled(true);
-            inputZonUrbOd.setEnabled(true);
-            cboxMunCod.setEnabled(true);
+        if(vivCodSelect.compareTo("")!=0){
+            inputBloCasMet.setEnabled(true);
+            inputBloCasOd.setEnabled(true);
+            cboxVivCod.setEnabled(false);
             llenarDatos();
             flag = 2;
         }
     }//GEN-LAST:event_btnModificarActionPerformed
 
-    private void tableMunicipiosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableMunicipiosMouseClicked
-        rowTable = tableMunicipios.getSelectedRow();
+    private void tableBloquesCasasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableBloquesCasasMouseClicked
+        rowTable = tableBloquesCasas.getSelectedRow();
         if (rowTable == -1) {
             JOptionPane.showMessageDialog(null, "No se Selecciono");
         }
         else {
-            zonUrbCodSelect = tableMunicipios.getValueAt(rowTable, 0).toString();
+            vivCodSelect = tableBloquesCasas.getValueAt(rowTable, 0).toString();
         }
-    }//GEN-LAST:event_tableMunicipiosMouseClicked
+    }//GEN-LAST:event_tableBloquesCasasMouseClicked
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        if(zonUrbCodSelect.compareTo("")!=0){
-            inputZonUrbCod.setEnabled(false);
-            inputZonUrbNom.setEnabled(false);
-            inputZonUrbOd.setEnabled(false);
-            cboxMunCod.setEnabled(false);
+        if(vivCodSelect.compareTo("")!=0){
+            inputBloCasMet.setEnabled(false);
+            inputBloCasOd.setEnabled(false);
+            cboxVivCod.setEnabled(false);
             llenarDatos();
             flag = 3;
         }
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        inputZonUrbCod.setEnabled(false);
-        inputZonUrbNom.setEnabled(false);
-        inputZonUrbOd.setEnabled(false);
-        cboxMunCod.setEnabled(false);
+        inputBloCasMet.setEnabled(false);
+        inputBloCasOd.setEnabled(false);
+        cboxVivCod.setEnabled(false);
         limpiarInputs();
         flag = 0;
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnInactivarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInactivarActionPerformed
-        if(zonUrbCodSelect.compareTo("")!=0){
-            inputZonUrbCod.setEnabled(false);
-            inputZonUrbNom.setEnabled(false);
-            inputZonUrbOd.setEnabled(false);
-            cboxMunCod.setEnabled(false);
+        if(vivCodSelect.compareTo("")!=0){
+            inputBloCasMet.setEnabled(false);
+            inputBloCasOd.setEnabled(false);
+            cboxVivCod.setEnabled(false);
             llenarDatos();
             flag = 4;
         }
     }//GEN-LAST:event_btnInactivarActionPerformed
 
     private void btnReactivarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReactivarActionPerformed
-        if(zonUrbCodSelect.compareTo("")!=0){
-            inputZonUrbCod.setEnabled(false);
-            inputZonUrbNom.setEnabled(false);
-            inputZonUrbOd.setEnabled(false);
-            cboxMunCod.setEnabled(false);
+        if(vivCodSelect.compareTo("")!=0){
+            inputBloCasMet.setEnabled(false);
+            inputBloCasOd.setEnabled(false);
+            cboxVivCod.setEnabled(false);
             llenarDatos();
             flag = 5;
         }
@@ -396,17 +376,17 @@ public class VistaZonaUrbana extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Ninguna Opcion Seleccionada");
         }
         if(flag==1){
-            String zonUrbNom = inputZonUrbNom.getText();
-            if (zonUrbNom.equals("")) {
+            String vivCod = cboxVivCod.getSelectedItem().toString();
+            if (vivCod.equals("")) {
                 JOptionPane.showMessageDialog(null, "Complete los datos");
             } 
             else {
                 try {
                     cn = con.getConeccion();
-                    st = cn.prepareStatement("INSERT INTO zonas_urbanas (ZonUrbNom, ZonUrbOd, MunCod, ZonUrbEst) VALUES (?, ?, ?, ?)");
-                    st.setString(1, zonUrbNom);
-                    st.setString(2, inputZonUrbOd.getText());
-                    st.setString(3, cboxMunCod.getSelectedItem().toString());
+                    st = cn.prepareStatement("INSERT INTO bloques_casas (VivCod, BloCasMet, BloCasOd, BloCasEst) VALUES (?, ?, ?, ?)");
+                    st.setString(1, vivCod);
+                    st.setString(2, inputBloCasMet.getText());
+                    st.setString(3, inputBloCasOd.getText());
                     st.setString(4, "A");
                     st.executeUpdate();
                     //limpiarInputs();
@@ -417,18 +397,17 @@ public class VistaZonaUrbana extends javax.swing.JFrame {
             }
         }
         if(flag==2){
-            String zonUrbNom = inputZonUrbNom.getText();
-            if (zonUrbNom.equals("") || zonUrbCodSelect.equals("")) {
+            String vivCod = cboxVivCod.getSelectedItem().toString();
+            if (vivCod.equals("") || vivCodSelect.equals("")) {
                 JOptionPane.showMessageDialog(null, "No selecciono un municipio");
             } 
             else {
                 try {
                     cn = con.getConeccion();
-                    st = cn.prepareStatement("UPDATE zonas_urbanas SET ZonUrbNom = ?, ZonUrbOd = ?, MunCod = ? WHERE ZonUrbCod = ?");
-                    st.setString(1, zonUrbNom);
-                    st.setString(2, inputZonUrbOd.getText());
-                    st.setString(3, cboxMunCod.getSelectedItem().toString());
-                    st.setString(4, zonUrbCodSelect);
+                    st = cn.prepareStatement("UPDATE bloques_casas SET BloCasMet = ?, BloCasOd = ? WHERE VivCod = ?");
+                    st.setString(1, inputBloCasMet.getText());
+                    st.setString(2, inputBloCasOd.getText());
+                    st.setString(3, vivCodSelect);
                     st.executeUpdate();
                     //limpiarInputs();
                     actualizar();
@@ -438,36 +417,36 @@ public class VistaZonaUrbana extends javax.swing.JFrame {
             }
         }
         if(flag==3){
-            if (zonUrbCodSelect.equals("")) {
+            if (vivCodSelect.equals("")) {
                 JOptionPane.showMessageDialog(null, "No selecciono un municipio");
             } 
             else {
                 try {
                     cn = con.getConeccion();
-                    st = cn.prepareStatement("UPDATE zonas_urbanas SET ZonUrbEst = ? WHERE ZonUrbCod = ?");
+                    st = cn.prepareStatement("UPDATE bloques_casas SET BloCasEst = ? WHERE VivCod = ?");
                     st.setString(1, "*");
-                    st.setString(2, zonUrbCodSelect);
+                    st.setString(2, vivCodSelect);
                     st.executeUpdate();
                     //limpiarInputs();
                     actualizar();
                 } catch (Exception e) {
                     if (e instanceof SQLIntegrityConstraintViolationException) {
-                        JOptionPane.showMessageDialog(null, "Otros elementos hacen referencia al campo: " + zonUrbCodSelect);
+                        JOptionPane.showMessageDialog(null, "Otros elementos hacen referencia al campo: " + vivCodSelect);
                     }
                     System.out.println("Error: " + e);
                 }
             }
         }
         if(flag==4){
-            if (zonUrbCodSelect.equals("")) {
+            if (vivCodSelect.equals("")) {
                 JOptionPane.showMessageDialog(null, "No selecciono un municipio");
             } 
             else {
                 try {
                     cn = con.getConeccion();
-                    st = cn.prepareStatement("UPDATE zonas_urbanas SET ZonUrbEst = ? WHERE ZonUrbCod = ?");
+                    st = cn.prepareStatement("UPDATE bloques_casas SET BloCasEst = ? WHERE VivCod = ?");
                     st.setString(1, "I");
-                    st.setString(2, zonUrbCodSelect);
+                    st.setString(2, vivCodSelect);
                     st.executeUpdate();
                     //limpiarInputs();
                     actualizar();
@@ -477,15 +456,15 @@ public class VistaZonaUrbana extends javax.swing.JFrame {
             }
         }
         if(flag==5){
-            if (zonUrbCodSelect.equals("")) {
+            if (vivCodSelect.equals("")) {
                 JOptionPane.showMessageDialog(null, "No selecciono un municipio");
             } 
             else {
                 try {
                     cn = con.getConeccion();
-                    st = cn.prepareStatement("UPDATE zonas_urbanas SET ZonUrbEst = ? WHERE ZonUrbCod = ?");
+                    st = cn.prepareStatement("UPDATE bloques_casas SET BloCasEst = ? WHERE VivCod = ?");
                     st.setString(1, "A");
-                    st.setString(2, zonUrbCodSelect);
+                    st.setString(2, vivCodSelect);
                     st.executeUpdate();
                     //limpiarInputs();
                     actualizar();
@@ -495,10 +474,9 @@ public class VistaZonaUrbana extends javax.swing.JFrame {
             }
         }
         
-        inputZonUrbCod.setEnabled(false);
-        inputZonUrbNom.setEnabled(false);
-        inputZonUrbOd.setEnabled(false);
-        cboxMunCod.setEnabled(false);
+        inputBloCasMet.setEnabled(false);
+        inputBloCasOd.setEnabled(false);
+        cboxVivCod.setEnabled(false);
         flag = 0;
             
     }//GEN-LAST:event_btnActualizarActionPerformed
@@ -525,32 +503,34 @@ public class VistaZonaUrbana extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(VistaZonaUrbana.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(VistaBloqueCasa.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(VistaZonaUrbana.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(VistaBloqueCasa.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(VistaZonaUrbana.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(VistaBloqueCasa.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(VistaZonaUrbana.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(VistaBloqueCasa.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new VistaZonaUrbana().setVisible(true);
+                new VistaBloqueCasa().setVisible(true);
             }
         });
     }
-    void listarRegNom(){
-        cboxMunCod.removeAllItems();
+    void listarVivCod(){
+        cboxVivCod.removeAllItems();
         try{
             cn = con.getConeccion();
-            st = cn.prepareStatement("SELECT MunCod FROM municipios");
+            st = cn.prepareStatement("SELECT VivCod FROM viviendas");
             rs = st.executeQuery();
             while(rs.next()){
-                cboxMunCod.addItem(rs.getString("MunCod"));
+                cboxVivCod.addItem(rs.getString("VivCod"));
             }
 
         }catch(Exception e){
@@ -566,43 +546,40 @@ public class VistaZonaUrbana extends javax.swing.JFrame {
     void listar(){
         try{
             cn = con.getConeccion();
-            st = cn.prepareStatement("SELECT * FROM zonas_urbanas");
+            st = cn.prepareStatement("SELECT * FROM bloques_casas");
             rs = st.executeQuery();
-            Object [] zonas = new Object[5];
-            modelo = (DefaultTableModel) tableMunicipios.getModel();
+            Object [] zonas = new Object[4];
+            modelo = (DefaultTableModel) tableBloquesCasas.getModel();
             while(rs.next()){
-                zonas[0] = rs.getString("ZonUrbCod");
-                zonas[1] = rs.getString("ZonUrbNom");
-                zonas[2] = rs.getString("ZonUrbOd");
-                zonas[3] = rs.getString("MunCod");
-                zonas[4] = rs.getString("ZonUrbEst");
+                zonas[0] = rs.getString("VivCod");
+                zonas[1] = rs.getString("BloCasMet");
+                zonas[2] = rs.getString("BloCasOd");
+                zonas[3] = rs.getString("BloCasEst");
                 modelo.addRow(zonas);
             }
-            tableMunicipios.setModel(modelo);
+            tableBloquesCasas.setModel(modelo);
         }catch(Exception e){
             System.out.println("Error: "+e);
         }
     }
 
     void limpiarInputs(){
-        inputZonUrbCod.setText("");
-        inputZonUrbNom.setText("");
-        inputZonUrbOd.setText("");
-        zonUrbCodSelect = "";
+        inputBloCasMet.setText("");
+        inputBloCasOd.setText("");
+        vivCodSelect = "";
     }
 
     void limpiarTabla(){
-        int count = tableMunicipios.getRowCount()-1;
+        int count = tableBloquesCasas.getRowCount()-1;
         for(int i=0;i<=count;i++){
             modelo.removeRow(0);
         }
     }
     
     private void llenarDatos(){
-        inputZonUrbCod.setText(zonUrbCodSelect);
-        inputZonUrbNom.setText(tableMunicipios.getValueAt(rowTable, 1).toString());
-        inputZonUrbOd.setText(tableMunicipios.getValueAt(rowTable, 2).toString());
-        cboxMunCod.setSelectedItem(tableMunicipios.getValueAt(rowTable, 3).toString());
+        cboxVivCod.setSelectedItem(vivCodSelect);
+        inputBloCasMet.setText(tableBloquesCasas.getValueAt(rowTable, 1).toString());
+        inputBloCasOd.setText(tableBloquesCasas.getValueAt(rowTable, 2).toString());
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -614,13 +591,11 @@ public class VistaZonaUrbana extends javax.swing.JFrame {
     private javax.swing.JButton btnModificar;
     private javax.swing.JButton btnReactivar;
     private javax.swing.JButton btnSalir;
-    private javax.swing.JComboBox<String> cboxMunCod;
-    private javax.swing.JTextField inputZonUrbCod;
-    private javax.swing.JTextField inputZonUrbNom;
-    private javax.swing.JTextArea inputZonUrbOd;
+    private javax.swing.JComboBox<String> cboxVivCod;
+    private javax.swing.JTextField inputBloCasMet;
+    private javax.swing.JTextArea inputBloCasOd;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -628,6 +603,6 @@ public class VistaZonaUrbana extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextField jTextField1;
-    private javax.swing.JTable tableMunicipios;
+    private javax.swing.JTable tableBloquesCasas;
     // End of variables declaration//GEN-END:variables
 }
